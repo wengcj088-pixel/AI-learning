@@ -57,20 +57,106 @@ Agent：你给目标 → 它**自己规划步骤、调用工具、多步执行**
 
 ---
 
-## 🔗 推荐学习项目
+## 📚 核心知识精讲（Agent 课 + LangChain 实战提炼）
 
-| 项目 | Star | 亮点 |
-|---|---|---|
-| [microsoft/ai-agents-for-beginners](https://github.com/microsoft/ai-agents-for-beginners) | ⭐ 5k+ | 微软 11 章 Agent 入门课，含中文，从概念到 Azure 部署 |
-| [ed-donner/llm_engineering](https://github.com/ed-donner/llm_engineering) | ⭐ 2k+ | 8 周训练营，会议纪要→RAG 问答→多智能体，渐进式项目 |
-| [Arindam200/awesome-ai-apps](https://github.com/Arindam200/awesome-ai-apps) | ⭐ 2.5k+ | 100+ 可运行 AI 应用示例，按难度分级，一键部署 |
-| [langchain-ai/langchain](https://github.com/langchain-ai/langchain) | ⭐ 90k+ | 最流行的 LLM 应用开发框架，RAG/Agent 都有现成组件 |
+> 微软 ai-agents-for-beginners、ed-donner 的训练营、LangChain 文档里做 RAG/Agent 真正要掌握的工程细节，我提炼成下面几块。掌握这些，你就能亲手搭出能用的系统。
 
-### 主流工具栈（挑一套上手即可）
+### 1. RAG 的五个环节，每个都有坑
 
-- **框架**：LangChain / LlamaIndex（RAG 尤其好用）
-- **向量库**：Chroma（本地起步最简单）
-- **快速界面**：Streamlit / Gradio
+前面给了 RAG 的伪代码，但实战里**每一步都有关键决策**，这才是课程真正教的：
+
+**① 文档切分 (Chunking)** —— RAG 成败的第一关
+- 切太大：检索到的片段含太多无关内容，干扰模型。
+- 切太小：语义被切碎，检索不到完整信息。
+- **实战经验**：每块 300~500 字，块之间**重叠 10~20%**（防止把一句话拦腰切断）。按段落/标题切比按固定字数切更好。
+
+**② 向量化 (Embedding)**
+- 用专门的 Embedding 模型（如 `text-embedding-3`、`bge`、`m3e`），**不是**对话模型。
+- 中文场景优先选支持中文的 Embedding 模型，效果差别很大。
+
+**③ 存入向量库并检索**
+- 检索时返回 `top_k`（通常 3~5）个最相关片段。
+- **相似度**常用余弦相似度（方向越接近越相关）。
+
+**④ 重排 (Rerank) —— 进阶但很有用**
+- 向量检索快但不够精准。用一个 Rerank 模型对 top_k 再打分排序，把最相关的排前面，回答质量明显提升。
+
+**⑤ 拼 Prompt 生成**
+- 模板：`根据以下资料回答问题，资料里没有就说不知道。\n资料：{检索结果}\n问题：{question}`
+- 一定要加"没有就说不知道"，否则模型会拿检索到的无关内容硬编。
+
+### 2. Agent 的核心循环：ReAct 模式（必须理解）
+
+Agent 不是玄学，主流 Agent 都基于 **ReAct（Reasoning + Acting）** 循环：
+
+```
+Thought（想）：我需要先查一下今天的汇率
+   ▼
+Action（做）：调用 [汇率查询工具]，参数 USD→CNY
+   ▼
+Observation（看结果）：1 USD = 7.2 CNY
+   ▼
+Thought（再想）：拿到汇率了，现在算 100 美元
+   ▼
+Action：调用 [计算器]，100 * 7.2
+   ▼
+Observation：720
+   ▼
+Final Answer：100 美元约合 720 元人民币
+```
+
+> **要理解的点**：模型本身不会"执行"任何操作，它只是**输出"我想调用哪个工具、传什么参数"**，由你的代码真正去执行，再把结果喂回给模型。循环往复直到模型认为可以给最终答案。
+
+### 3. Function Calling —— Agent 调用工具的底层机制
+
+现代 Agent 靠 Function Calling 实现。你要做三件事：
+
+1. **描述工具**：用 JSON Schema 告诉模型有哪些函数、参数是什么。
+```python
+tools = [{
+  "type": "function",
+  "function": {
+    "name": "get_weather",
+    "description": "查询某城市的实时天气",
+    "parameters": {
+      "type": "object",
+      "properties": {"city": {"type": "string", "description": "城市名"}},
+      "required": ["city"]
+    }
+  }
+}]
+```
+2. **模型返回"要调用哪个函数 + 参数"**（它不自己执行）。
+3. **你的代码执行函数，把结果作为新消息传回**，模型据此生成最终回答。
+
+### 4. 单 Agent vs 多 Agent（Multi-Agent）
+
+- **单 Agent**：一个模型 + 一堆工具，适合明确任务。
+- **多 Agent**：多个各有分工的 Agent 协作，如"研究员 Agent + 写作 Agent + 审校 Agent"。
+- **常见协作模式**：主管调度（一个 Agent 派活给其他）、流水线（依次传递）、辩论（互相质疑提高质量）。
+- 微软课里用的是"每个 Agent 有明确角色 + 能互相发消息"的模式。
+
+### 5. 框架怎么选 & 三个高频组件
+
+- **LangChain**：生态最大，Agent/工具/记忆组件齐全，适合复杂应用。
+- **LlamaIndex**：专注 RAG，文档索引/检索做得最顺手。
+- **不用框架**：直接调 API + 自己写循环，最透明，适合学原理。
+
+三个必懂组件：
+| 组件 | 作用 |
+|---|---|
+| **Memory（记忆）** | 存对话历史，让多轮对话有上下文 |
+| **Retriever（检索器）** | 封装"向量化→检索"，RAG 的核心 |
+| **Tool（工具）** | 把任意函数包成 Agent 能调用的工具 |
+
+---
+
+### 📎 延伸参考
+
+- **microsoft/ai-agents-for-beginners**（⭐5k+）：上面 Agent 部分的完整 11 章课，含中文，从概念到部署。
+- **ed-donner/llm_engineering**（⭐2k+）：8 周训练营，从 RAG 问答做到多智能体，渐进式项目练手。
+- **Arindam200/awesome-ai-apps**（⭐2.5k+）：100+ 可运行示例，挑感兴趣的复刻。
+- **langchain-ai/langchain**（⭐90k+）：真正动手时的框架文档与组件。
 
 ---
 

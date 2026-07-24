@@ -62,21 +62,112 @@
 
 ---
 
-## 🔗 推荐学习项目
+## 📚 核心知识精讲（Made-With-ML + ML 系统设计提炼）
 
-| 项目 | Star | 亮点 |
+> GokuMohandas 的 Made-With-ML 和 Chip Huyen 的《ML 系统设计》是这一阶段的两座大山。我把其中**把 AI 应用真正送上线并稳定运行**必须掌握的核心提炼在这里。
+
+### 1. 把应用变服务：FastAPI 四件套
+
+Made-With-ML 用 FastAPI 做服务化，你要掌握这四点：
+
+```python
+from fastapi import FastAPI
+from pydantic import BaseModel
+
+app = FastAPI()
+
+class Query(BaseModel):          # ① 用 Pydantic 定义请求体，自动校验参数
+    question: str
+
+@app.post("/ask")                # ② 定义接口路由和方法
+def ask(q: Query):
+    answer = my_rag_app(q.question)
+    return {"answer": answer}    # ③ 返回 JSON，自动序列化
+
+@app.get("/health")              # ④ 健康检查接口（部署/监控必备）
+def health():
+    return {"status": "ok"}
+# 启动: uvicorn main:app --host 0.0.0.0 --port 8000
+# 自带交互文档: 访问 /docs 就能测试接口
+```
+
+> **健康检查接口是刚需**：几乎所有部署平台（K8s、负载均衡）都靠定时请求 `/health` 判断你的服务是否活着。
+
+### 2. Docker 容器化：三个核心概念 + 一个模板
+
+**为什么要 Docker？** —— 解决"我电脑上能跑，服务器上跑不起来"的环境地狱。它把代码+依赖+环境打包成一个到哪都一致运行的"集装箱"。
+
+- **Image（镜像）**：打包好的模板（只读）。
+- **Container（容器）**：镜像跑起来的实例。
+- **Dockerfile**：描述"怎么打包"的脚本。
+
+```dockerfile
+FROM python:3.11-slim            # 基础环境
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt   # 装依赖（先装依赖再拷代码，利用缓存加速）
+COPY . .
+EXPOSE 8000
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+```
+```bash
+docker build -t my-ai-app .      # 打包成镜像
+docker run -p 8000:8000 my-ai-app # 跑起来
+```
+
+### 3. 部署方式怎么选（按省心程度排序）
+
+| 方式 | 省心度 | 适合 |
 |---|---|---|
-| [GokuMohandas/Made-With-ML](https://github.com/GokuMohandas/Made-With-ML) | ⭐ 16.7k | **首选**。教你把模型从实验推向生产：分布式训练、MLflow、CI/CD、监控、A/B 测试 |
-| [chiphuyen/dmls-book](https://github.com/chiphuyen/dmls-book) | ⭐ 8.6k | Chip Huyen《ML 系统设计》配套，端到端系统设计"圣经" |
-| [visenger/awesome-mlops](https://github.com/visenger/awesome-mlops) | ⭐ 12k+ | MLOps 资源大全，工具/文章/课程分类整理 |
+| **Serverless / Pages**（EdgeOne、Vercel、Cloudflare） | ⭐⭐⭐⭐⭐ | 小应用、个人项目，免运维、按量付费、自动伸缩 |
+| **PaaS**（Railway、Render） | ⭐⭐⭐⭐ | 想要点控制权但不想碰服务器 |
+| **云服务器 + Docker**（腾讯云/阿里云/AWS） | ⭐⭐⭐ | 需要完全控制、长驻服务 |
+| **K8s 集群** | ⭐⭐ | 大规模、多服务、要弹性伸缩的生产系统 |
 
-### 常用部署工具栈
+> 学习期建议直接上 **Serverless**，一条命令部署完拿到公网 URL，把精力放在打通闭环上。
 
-- **API 框架**：FastAPI（现代、快、自带文档）
-- **容器**：Docker + Docker Compose
-- **Serverless / Pages**：EdgeOne Makers、Vercel、Cloudflare Workers（适合小应用，免运维）
-- **云服务器**：腾讯云 / 阿里云 / AWS
-- **监控**：Prometheus + Grafana，或平台自带监控
+### 4. CI/CD：让"改代码→上线"自动化
+
+Made-With-ML 强调的工程习惯。核心：代码一 push，自动跑测试、自动构建镜像、自动部署。
+
+```
+git push → [CI] 跑测试+lint → 构建 Docker 镜像 → [CD] 自动部署到线上
+```
+- 工具：GitHub Actions（最易上手）、GitLab CI。
+- 价值：告别"手动部署忘了某步导致线上炸了"。
+
+### 5. 上线不是终点：监控与 MLOps 闭环
+
+Chip Huyen 反复强调——**模型上线后才是挑战的开始**。要盯这几类指标：
+
+| 类别 | 盯什么 |
+|---|---|
+| **系统指标** | 延迟(latency)、吞吐(QPS)、错误率、资源占用 |
+| **模型指标** | 预测准确率、用户满意度、人工介入率 |
+| **数据漂移** | 线上数据分布 vs 训练数据分布变了没 → 变了要重训 |
+
+**MLOps 完整闭环**（这一阶段的终极图景）：
+```
+数据 → 训练 → 评估 → 部署 → 监控 → 发现漂移/收集反馈 → 回到训练
+  ↑______________________ 持续迭代，模型越用越好 ______________________↓
+```
+
+### 6. LLM 应用特有的部署考量（做大模型应用必知）
+
+传统 MLOps 之外，大模型应用还要额外关注：
+- **成本控制**：API 按 token 计费，要监控用量、加缓存（相同问题不重复调用）、必要时限流。
+- **延迟优化**：用流式输出(stream)改善体感；小任务用小模型。
+- **提示词版本管理**：Prompt 也是"代码"，要版本化、能回滚、能 A/B 测试。
+- **安全护栏**：输入过滤（防注入）、输出审核（防有害内容）。
+
+---
+
+### 📎 延伸参考
+
+- **GokuMohandas/Made-With-ML**（⭐16.7k）：上面所有工程实践的完整实战教程，**首选精学**。
+- **chiphuyen/dmls-book**（⭐8.6k）：《ML 系统设计》配套，监控/数据漂移/系统设计的"圣经"。
+- **visenger/awesome-mlops**（⭐12k+）：MLOps 工具与文章大全，按需查。
+- **部署平台**：EdgeOne Makers / Vercel / Cloudflare Workers（Serverless）；腾讯云/阿里云/AWS（服务器）。
 
 ---
 
