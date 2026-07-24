@@ -1,0 +1,124 @@
+# 🚀 AI Learning Roadmap · 零基础到应用部署的完整闭环
+
+> 一条**从基本概念 → 核心原理 → 应用开发 → 生产部署**的高效学习路径。
+> 专为零基础学习者设计：**每一步都动手产出一个能跑的东西**，把"看视频"变成"造东西"。
+
+<p align="center">
+  <img src="https://img.shields.io/badge/level-零基础友好-brightgreen" />
+  <img src="https://img.shields.io/badge/path-模型→应用→部署-blue" />
+  <img src="https://img.shields.io/badge/language-中文-red" />
+  <img src="https://img.shields.io/badge/style-动手闭环-orange" />
+</p>
+
+---
+
+## 🧭 这份路线图解决什么问题？
+
+大多数人学 AI 会踩两个坑：
+
+1. **只看不做** —— 视频刷完，一行代码没敲，学完就忘。
+2. **跳过原理** —— 直接调 API 做应用，遇到 bug 无从下手，永远停在"调包侠"。
+
+本仓库的核心理念只有一句话：
+
+> **每个阶段都动手产出一个能跑的东西，让"模型 → 训练 → 应用 → 部署"真正闭环。**
+
+- 阶段二：**亲手写出一个 GPT**
+- 阶段三：**搭一个能对话的 AI 应用**
+- 阶段四：**做一个能回答私有文档的 RAG 问答系统**
+- 阶段五：**把它部署上线，别人能访问**
+
+---
+
+## 🗺️ 五阶段学习地图
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                     AI 零基础 → 应用部署闭环                        │
+└─────────────────────────────────────────────────────────────────┘
+
+  阶段一          阶段二           阶段三          阶段四          阶段五
+ ┌──────┐      ┌────────┐      ┌────────┐      ┌────────┐      ┌────────┐
+ │ 基础 │─────▶│ 原理   │─────▶│ 应用   │─────▶│ 工程   │─────▶│ 部署   │
+ │ 编程 │      │ 手写   │      │ 大模型 │      │ RAG/   │      │ MLOps  │
+ │ 数学 │      │ 神经网 │      │ 应用   │      │ Agent  │      │ 上线   │
+ └──────┘      └────────┘      └────────┘      └────────┘      └────────┘
+  看懂代码      打通黑盒         会用大模型      做真产品         稳定上线
+  和公式        不再怕 Transformer 做东西        能落地           可扩展
+
+  产出:         产出:           产出:           产出:           产出:
+  跑通第一个    手写一个         一个 Prompt     一个 RAG        部署上线的
+  ML 模型       micrograd+GPT   AI 小应用       问答系统        AI 服务
+```
+
+| 阶段 | 主题 | 目标 | 文档 |
+|:---:|---|---|---|
+| **1️⃣** | [编程与数学基础](docs/01-foundations.md) | 看得懂代码、看得懂公式 | 📖 |
+| **2️⃣** | [模型原理·从零手写](docs/02-model-principles.md) | 打通"黑盒"，理解 Transformer | 📖 |
+| **3️⃣** | [生成式 AI 应用入门](docs/03-genai-applications.md) | 会用大模型做东西 | 📖 |
+| **4️⃣** | [RAG / Agent 工程实战](docs/04-rag-agent-engineering.md) | 做出真正能用的产品 | 📖 |
+| **5️⃣** | [生产部署与 MLOps](docs/05-deployment-mlops.md) | 从"能跑"到"上线稳定" | 📖 |
+
+---
+
+## 📚 配套文档
+
+| 文档 | 内容 |
+|---|---|
+| [🧠 核心概念词典](docs/00-concepts-glossary.md) | 60+ AI 术语的人话解释，随时查 |
+| [🕸️ 知识图谱](docs/00-knowledge-graph.md) | 概念之间的依赖关系，看清"学什么之前要先会什么" |
+| [🔗 资源总汇](docs/resources.md) | 精选高星项目、课程、书籍、工具清单 |
+| [📅 可执行学习计划](docs/study-plan.md) | 12 周周计划 + 每日打卡表，照着走就行 |
+
+---
+
+## ⚡ 快速开始（给完全零基础的人）
+
+如果你现在什么都不会，**照下面顺序做，不要跳步**：
+
+1. **打基础**（1-3 周）：跟着 [`microsoft/ML-For-Beginners`](https://github.com/microsoft/ML-For-Beginners) 做完 12 周课
+2. **搞懂原理**（3-5 周）：跟 Karpathy 的 [`nn-zero-to-hero`](https://github.com/karpathy/nn-zero-to-hero) **亲手敲一遍**
+3. **学会应用**（2-3 周）：做完 [`microsoft/generative-ai-for-beginners`](https://github.com/microsoft/generative-ai-for-beginners) 21 课
+4. **做真项目**（3-4 周）：在 [`ed-donner/llm_engineering`](https://github.com/ed-donner/llm_engineering) 里挑项目复刻
+5. **学会上线**（2-3 周）：走一遍 [`GokuMohandas/Made-With-ML`](https://github.com/GokuMohandas/Made-With-ML) 的 MLOps 流程
+
+> 详细的每周任务拆解见 [📅 学习计划](docs/study-plan.md)。
+
+---
+
+## ✅ 进度打卡
+
+复制下面这段到你自己的 Issue 或笔记里，学完一项就打个勾：
+
+- [ ] 阶段一：跑通第一个机器学习模型（分类/回归）
+- [ ] 阶段二：手写完成 micrograd（自动微分）
+- [ ] 阶段二：手写一个能生成文本的 mini-GPT
+- [ ] 阶段三：搭一个基于大模型 API 的对话应用
+- [ ] 阶段三：完成一次 Prompt Engineering 实验
+- [ ] 阶段四：做一个 RAG 文档问答系统
+- [ ] 阶段四：做一个能调用工具的 Agent
+- [ ] 阶段五：把一个模型/应用部署上线（别人能访问）
+- [ ] 阶段五：给服务加上监控与日志
+
+---
+
+## 🎯 学完你能做什么
+
+- 读懂主流 AI 论文和开源项目的代码
+- 从零解释清楚 Transformer / 注意力机制的原理
+- 独立开发一个 AI 应用（对话、RAG、Agent）
+- 把 AI 应用部署上线并稳定运行
+
+---
+
+## 🤝 如何使用本仓库
+
+- **顺序学**：从阶段一开始，别跳。原理不通，应用就是空中楼阁。
+- **动手学**：每个阶段文档末尾都有"动手任务"，务必做完再进下一阶段。
+- **查着学**：遇到不懂的术语，随时翻 [概念词典](docs/00-concepts-glossary.md)。
+
+---
+
+<p align="center">
+  <b>学 AI 最好的时间是开始动手的那一刻。祝你早日闭环 🚀</b>
+</p>
