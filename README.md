@@ -68,6 +68,14 @@ AI 安全 **80% 是实战**。这一专题独立成篇，两篇递进：**06 篇
 | **🛡️** | [AI 安全实战·攻防手段与真实案例](docs/06-ai-security.md) | 会攻（红队）+ 会防（蓝队），能上手打靶场、跑扫描、出报告 | 📖 |
 | **🤖** | [Agent 安全深度篇·自主智能体攻防](docs/07-agent-security.md) | 懂"致命三要素"+"最小代理权"，能对带工具的 Agent 做红队评估 | 📖 |
 
+### 🚀 专题：把 AI 落地到企业（FDE 职业方向）
+
+学会了做 AI，下一步是**把它真正落地到客户的核心业务里赚钱**——这正是 2026 年薪资爆发（同比 +729%、巨头砸 $55 亿）的 **FDE（前线部署工程师）** 在干的事。这一专题把 Palantir 原始方法论 + OpenAI/Anthropic 最新实践，提炼成**可照做的落地全流程**：Echo/Delta 双人小队、碎石路→柏油路飞轮、Bootcamp 五天极限交付法、Ontology 落地、如何做好 FDE 的三层能力栈与成长路径。
+
+| 专题 | 主题 | 目标 | 文档 |
+|:---:|---|---|---|
+| **🚀** | [前线部署工程师（FDE）实战全流程](docs/08-forward-deployed-engineer.md) | 懂 FDE 本质与飞轮，能跑通"发现痛点→砍MVP→快速交付→落地闭环→扩张"全流程 | 📖 |
+
 ---
 
 ## 📚 配套文档
@@ -80,6 +88,7 @@ AI 安全 **80% 是实战**。这一专题独立成篇，两篇递进：**06 篇
 | [📅 可执行学习计划](docs/study-plan.md) | 12 周周计划 + 每日打卡表，照着走就行 |
 | [🛡️ AI 安全实战](docs/06-ai-security.md) | OWASP LLM Top10 攻防实战、真实案例、工具链、靶场、专家路径 |
 | [🤖 Agent 安全深度篇](docs/07-agent-security.md) | OWASP Agentic Top10 (ASI)、MCP 工具投毒、记忆投毒、多Agent信任、least agency |
+| [🚀 FDE 实战全流程](docs/08-forward-deployed-engineer.md) | 前线部署工程师：起源本质、Echo/Delta、碎石路→柏油路、Bootcamp五天交付、Ontology、如何做好FDE |
 
 ---
 
