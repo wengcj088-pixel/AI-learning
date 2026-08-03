@@ -84,6 +84,14 @@ AI 安全 **80% 是实战**。这一专题独立成篇，两篇递进：**06 篇
 |:---:|---|---|---|
 | **🧩** | [开源 AI 应用项目精选](docs/09-ai-application-projects.md) | 会挑项目、能拆架构、能复刻核心能力，把 star 变成真本事 | 📖 |
 
+### 🧠 专题：读懂大模型格局与技术差距（认知底座）
+
+要成为真正的行家，不能只会用模型，还得**看穿模型背后的技术真相和产业格局**。这一专题从 LLM 底层架构与训练过程出发，把两个被反复误读的问题讲透：**① "国产模型是蒸馏海外模型出来的"——蒸馏到底指什么？**（软标签/暗知识/数据蒸馏/合成数据，以及传言从何而来的客观拆解）；**② 国内外头部差距的真实成因**（算力→数据→算法 Know-how→人才→时间复利 的五环链条）。并展开决定天花板的 **Scaling Law（C≈6ND、Chinchilla 最优）** 与三大国产原创算法 **MoE / MLA / GRPO**，最后给出"差距正在收窄"的客观判断。**不站队、不喊口号，只讲能站住脚的事实。**
+
+| 专题 | 主题 | 目标 | 文档 |
+|:---:|---|---|---|
+| **🧠** | [大模型格局与技术差距深度解析](docs/10-llm-landscape-and-gap.md) | 讲清蒸馏真相、看懂差距五大成因、掌握 Scaling Law 与 MoE/MLA/GRPO，形成独立判断 | 📖 |
+
 ---
 
 ## 📚 配套文档
@@ -98,6 +106,7 @@ AI 安全 **80% 是实战**。这一专题独立成篇，两篇递进：**06 篇
 | [🤖 Agent 安全深度篇](docs/07-agent-security.md) | OWASP Agentic Top10 (ASI)、MCP 工具投毒、记忆投毒、多Agent信任、least agency |
 | [🚀 FDE 实战全流程](docs/08-forward-deployed-engineer.md) | 前线部署工程师：起源本质、Echo/Delta、碎石路→柏油路、Bootcamp五天交付、Ontology、如何做好FDE |
 | [🧩 开源 AI 应用项目精选](docs/09-ai-application-projects.md) | 六大类高星可自部署项目：Dify/RAGFlow/OpenHands 等，拆源码学什么 + 四步内化法 + 动手任务 |
+| [🧠 大模型格局与技术差距](docs/10-llm-landscape-and-gap.md) | 蒸馏真相（软标签/暗知识/合成数据）、差距五大成因链、Scaling Law、MoE/MLA/GRPO 原创算法、客观判断 |
 
 ---
 
